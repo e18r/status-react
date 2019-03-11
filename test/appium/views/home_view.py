@@ -102,8 +102,6 @@ class EmptyHomeScreen(BaseText):
         super(EmptyHomeScreen, self).__init__(driver)
         self.locator = self.Locator.text_part_selector('Your Home screen will house your recent chats')
 
-
-
 class HomeView(BaseView):
     def __init__(self, driver):
         super(HomeView, self).__init__(driver)

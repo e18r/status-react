@@ -34,7 +34,6 @@ def create_new_group_chat(device_1_home, device_2_home, chat_name):
 def create_and_join_group_chat(device_1_home, device_2_home, chat_name):
     device_1_chat, device_2_chat = create_new_group_chat(device_1_home, device_2_home, chat_name)
     device_2_chat.join_chat_button.click()
-
     return device_1_chat, device_2_chat
 
 
