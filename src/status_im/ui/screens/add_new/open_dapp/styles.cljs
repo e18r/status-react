@@ -9,8 +9,7 @@
   {:color          colors/gray})
 
 (def black-label
-  {:font-size      15
-   :letter-spacing -0.2})
+  {:font-size 15})
 
 (def dapp
   (merge gray-label
@@ -21,11 +20,10 @@
          {:margin-top 8}))
 
 (def list-title
-  {:margin-top     24
-   :margin-left    16
-   :font-size      14
-   :letter-spacing -0.2
-   :color          colors/gray})
+  {:margin-top  24
+   :margin-left 16
+   :font-size   14
+   :color       colors/gray})
 
 (def description-container
   {:margin-top        26
