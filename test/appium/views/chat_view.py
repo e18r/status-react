@@ -175,6 +175,18 @@ class CommandsButton(BaseButton):
         self.locator = self.Locator.accessibility_id('chat-commands-button')
 
 
+class ShowStickersButton(BaseButton):
+    def __init__(self, driver):
+        super(ShowStickersButton, self).__init__(driver)
+        self.locator = self.Locator.accessibility_id('show-stickers-icon')
+
+
+class GetStickers(BaseButton):
+    def __init__(self, driver):
+        super(GetStickers, self).__init__(driver)
+        self.locator = self.Locator.xpath_selector('//*[contains(@text, "Get Stickers")]')
+
+
 class ViewProfileButton(BaseButton):
     def __init__(self, driver):
         super(ViewProfileButton, self).__init__(driver)
@@ -309,6 +321,9 @@ class ChatView(BaseView):
         self.commands_button = CommandsButton(self.driver)
         self.send_command = SendCommand(self.driver)
         self.request_command = RequestCommand(self.driver)
+
+        self.show_stickers_button = ShowStickersButton(self.driver)
+        self.get_stickers = GetStickers(self.driver)
 
         self.chat_options = ChatMenuButton(self.driver)
         self.members_button = MembersButton(self.driver)

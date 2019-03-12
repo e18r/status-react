@@ -636,3 +636,19 @@ class TestMessagesOneToOneChatSingle(SingleDeviceTestCase):
             self.errors.append('Wrong fiat value while requesting assets from wallet with user selected currency.')
 
         self.verify_no_errors()
+
+    @marks.testrail_id(1234)
+    def test_install_stickers_pack(self):
+        user = transaction_recipients['J']
+        sign_in = SignInView(self.driver)
+        home = sign_in.recover_access(user['passphrase'])
+        home.join_public_chat(home.get_public_chat_name())
+        chat = sign_in.get_chat_view()
+        chat.show_stickers_button.click()
+        chat.get_stickers.click()
+        chat.element_by_text('Install').click()
+        transaction_view = chat.get_send_transaction_view()
+        transaction_view.back_button.click()
+        import time
+        time.sleep(2)
+        self.driver.swipe(1000, 1700, 100, 1700)

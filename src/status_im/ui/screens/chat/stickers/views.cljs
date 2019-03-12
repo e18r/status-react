@@ -43,7 +43,9 @@
        ^{:key uri}
        [react/touchable-highlight {:style    {:height 75 :width 75 :margin 5}
                                    :on-press #(re-frame/dispatch [:chat/send-sticker sticker])}
-        [react/image {:style {:resize-mode :cover :width "100%" :height "100%"} :source {:uri uri}}]])]]])
+        [react/image {:style {:resize-mode :cover :width "100%" :height "100%"}
+                      :accessibility-label :sticker-icon
+                      :source {:uri uri}}]])]]])
 
 (defview recent-stickers-panel [window-width]
   (letsubs [stickers [:stickers/recent]]
