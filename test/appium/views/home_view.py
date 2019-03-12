@@ -97,6 +97,7 @@ class ChatUrlText(BaseText):
         super(ChatUrlText, self).__init__(driver)
         self.locator = self.Locator.accessibility_id('chat-url-text')
 
+
 class HomeView(BaseView):
     def __init__(self, driver):
         super(HomeView, self).__init__(driver)
