@@ -154,3 +154,10 @@
       (getKeys pairing pin)
       (then #(re-frame/dispatch [:hardwallet.callback/on-get-keys-success %]))
       (catch #(re-frame/dispatch [:hardwallet.callback/on-get-keys-error (error-object->map %)]))))
+
+(defn sign
+  [{:keys [pairing pin hash]}]
+  (.. keycard
+      (sign pairing pin hash)
+      (then #(re-frame/dispatch [:hardwallet.callback/on-sign-success %]))
+      (catch #(re-frame/dispatch [:hardwallet.callback/on-sign-error (error-object->map %)]))))

@@ -1084,3 +1084,11 @@
                  :db                              (update-in db [:hardwallet :pin] merge {:status      :error
                                                                                           :error-label :t/pin-mismatch})}
                 (navigation/navigate-to-cofx :enter-pin nil)))))
+
+(fx/defn on-sign-success
+  [{:keys [db] :as cofx} data]
+  (log/debug "[hardwallet] sign success: " data))
+
+(fx/defn on-sign-error
+  [{:keys [db] :as cofx} error]
+  (log/debug "[hardwallet] sign error: " error))
