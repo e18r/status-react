@@ -210,14 +210,6 @@ class DeclineChatButton(BaseButton):
         super(DeclineChatButton, self).__init__(driver)
         self.locator = self.Locator.text_part_selector('Decline invitation')
 
-
-class ChatElementByTextPart(BaseText):
-    def __init__(self, driver, text):
-        super(ChatElementByTextPart, self).__init__(driver)
-        self.message_text = text
-        self.locator = self.Locator.xpath_selector(
-            "//*[contains(@text,'%s')]/ancestor::android.view.ViewGroup[@content-desc='chat-item']" % text)
-
 class ChatElementByText(BaseText):
     def __init__(self, driver, text):
         super(ChatElementByText, self).__init__(driver)
@@ -282,12 +274,6 @@ class ChatElementByText(BaseText):
         return element.is_element_displayed(wait_time)
 
 
-class EmptyPublicChatMessage(BaseText):
-    def __init__(self, driver):
-        super().__init__(driver)
-        self.locator = self.Locator.text_part_selector("There are no messages")
-
-
 class ChatItem(BaseElement):
     def __init__(self, driver):
         super().__init__(driver)
@@ -315,7 +301,6 @@ class ChatView(BaseView):
         self.add_to_contacts = AddToContacts(self.driver)
         self.user_name_text = UserNameText(self.driver)
         self.no_messages_in_chat = NoMessagesInChatText(self.driver)
-        self.empty_public_chat_message = EmptyPublicChatMessage(self.driver)
         self.chat_item = ChatItem(self.driver)
 
         self.commands_button = CommandsButton(self.driver)
@@ -459,10 +444,6 @@ class ChatView(BaseView):
     def chat_element_by_text(self, text):
         self.driver.info("Looking for a message by text: '%s'" % text)
         return ChatElementByText(self.driver, text)
-
-    def chat_element_by_text_part(self, text):
-        self.driver.info("Looking for a message that contains text: '%s'" % text)
-        return ChatElementByTextPart(self.driver, text)
 
     def verify_message_is_under_today_text(self, text, errors):
         message_element = self.chat_element_by_text(text)
