@@ -111,16 +111,3 @@
         [message-content-text {:content      last-message-content
                                :content-type last-message-content-type}]
         [unviewed-indicator chat-id]]]]]))
-
-(defn home-list-browser-item-inner-view [{:keys [dapp url name browser-id]}]
-  (let [photo-path (:photo-path dapp)]
-    [list-item/list-item (merge
-                          {:title name
-                           :subtitle (or url (i18n/label :t/dapp))
-                           :on-press #(re-frame/dispatch [:browser.ui/browser-item-selected browser-id])}
-                          (if dapp
-                            (if (and photo-path (not (string/blank? (:photo-path dapp))))
-                              {:image-path photo-path}
-                              {:image [chat-icon/default-browser-icon name]})
-                            {:image [react/view styles/browser-icon-container
-                                     [vector-icons/icon :main-icons/browser {:color colors/gray}]]}))]))

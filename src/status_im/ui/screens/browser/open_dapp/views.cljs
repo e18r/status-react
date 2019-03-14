@@ -7,53 +7,43 @@
    [status-im.ui.components.status-bar.view :as status-bar]
    [status-im.ui.screens.browser.open-dapp.styles :as styles]
    [status-im.ui.components.list.views :as list]
-   [status-im.ui.screens.home.views.inner-item :as inner-item]
    [status-im.ui.components.common.common :as components.common]
    [status-im.ui.screens.wallet.components.views :as components]
    [status-im.ui.components.bottom-bar.styles :as tabs.styles]
    [status-im.react-native.resources :as resources]
-   [status-im.ui.components.chat-icon.screen :as chat-icon])
+   [status-im.ui.components.list-item.views :as list-item]
+   [status-im.ui.components.icons.vector-icons :as vector-icons])
   (:require-macros [status-im.utils.views :as views]))
 
-(defn list-item [{:keys [browser-id] :as home-item}]
+(defn list-item [{:keys [browser-id name url]}]
   [list/deletable-list-item {:type      :browsers
                              :id        browser-id
                              :on-delete #(do
                                            (re-frame/dispatch [:set-swipe-position :browsers browser-id false])
                                            (re-frame/dispatch [:browser.ui/remove-browser-pressed browser-id]))}
-   [inner-item/home-list-browser-item-inner-view home-item]])
-
-(defn- render-dapp [{:keys [dapp-url recent? description name] :as dapp}]
-  (if recent?
-    [list-item dapp]
-    [react/touchable-highlight {:on-press #(re-frame/dispatch [:browser.ui/open-dapp-button-pressed dapp-url])}
-     [react/view {:style {:padding-top 11 :padding-horizontal 16 :padding-bottom 7 :flex-direction :row}}
-      [chat-icon/contact-icon-contacts-tab dapp]
-      [react/view {:padding-left 16 :padding-right 2 :flex 1}
-       [react/text {:style {:font-size 15 :line-height 22 :font-weight "500"}} name]
-       [react/text {:flex 1}
-        [react/text {:style {:font-size 13 :color "#939BA1" :line-height 18
-                             :margin-top 5 :margin-bottom 2}}
-         description]]
-       [react/text {:style {:font-size 12 :color "#4360DF"}} (str dapp-url " ->")]]]]))
+   [list-item/list-item
+    {:on-press #(re-frame/dispatch [:browser.ui/browser-item-selected browser-id])
+     :title    name
+     :subtitle (or url (i18n/label :t/dapp))
+     :image    [react/view styles/browser-icon-container
+                [vector-icons/icon :main-icons/browser {:color colors/gray}]]}]])
 
 (defn list-header [empty?]
   [react/view (when empty? {:flex 1})
-   [react/view {:margin       16 :border-color colors/gray-lighter
-                :border-width 1 :border-radius 12 :padding-vertical 16 :padding-horizontal 44
-                :align-items  :center}
-    [components.common/image-contain {:container-style {}} {:image (:dapp-store resources/ui) :width 768 :height 333}]
-    [react/text {:style {:margin-top 12 :font-size 15 :font-weight "500" :line-height 22}} "Open the ÐApp Store"]
-    [react/text {:style {:color colors/blue :font-size 13 :line-height 22}} "https://discover.dapps.eth ->"]]
+   [react/touchable-highlight {:on-press #(re-frame/dispatch [:browser.ui/dapp-url-submitted "simpledapp.eth#dapp-store"])}
+    [react/view styles/dapp-store-container
+     [components.common/image-contain {:container-style {}} {:image (:dapp-store resources/ui) :width 768 :height 333}]
+     [react/text {:style styles/open-dapp-store} (i18n/label :t/open-dapp-store)]
+     [react/text {:style {:color colors/blue :font-size 13 :line-height 22}} "https://discover.dapps.eth ->"]]]
    (if empty?
      [react/view {:flex 1 :align-items :center :justify-content :center}
-      [react/text {:style {:color colors/gray :font-size 15}} "Browsed websites will appear here."]]
+      [react/text {:style {:color colors/gray :font-size 15}} (i18n/label :t/browsed-websites)]]
      [react/view {:margin-top 14 :margin-left 16 :margin-bottom 4}
-      [react/text {:style {:line-height 22 :font-size 15 :color colors/gray}} (i18n/label :t/recent)]])])
+      [react/text {:style {:line-height 22 :font-size 15 :color colors/gray}}
+       (i18n/label :t/recent)]])])
 
 (views/defview open-dapp []
   (views/letsubs [browsers [:browser/browsers-vals]
-                  dapps [:contacts/all-dapps]
                   url-text (atom nil)]
     [react/keyboard-avoiding-view {:style {:flex 1}}
      [status-bar/status-bar]
@@ -67,25 +57,13 @@
                          :accessibility-label :dapp-url-input
                          :return-key-type     :go}]]
      [components/separator]
-     [list/section-list {:sections                  (cond-> dapps
-                                                      (not (empty? browsers))
-                                                      (conj {:title (i18n/label :t/recent)
-                                                             :data (map #(assoc % :dapp-url (:url %) :recent? true) browsers)}))
-                         :key-fn                    :dapp-url
-                         :render-fn                 render-dapp
-                         :enableEmptySections       true
-                         :footer         [react/view
-                                          {:style {:height     tabs.styles/tabs-diff
-                                                   :align-self :stretch}}]
-                         :keyboardShouldPersistTaps :always}]
-     ;;TODO next iteration in next PR
-     #_(if (empty? browsers)
-         [list-header true]
-         [list/flat-list {:header         [list-header false]
-                          :data           (vals browsers)
-                          :footer         [react/view
-                                           {:style {:height     tabs.styles/tabs-diff
-                                                    :align-self :stretch}}]
-                          :key-fn         :browser-id
-                          :end-fill-color colors/white
-                          :render-fn      list-item}])]))
+     (if (empty? browsers)
+       [list-header true]
+       [list/flat-list {:header         [list-header false]
+                        :data           browsers
+                        :footer         [react/view
+                                         {:style {:height     tabs.styles/tabs-diff
+                                                  :align-self :stretch}}]
+                        :key-fn         :browser-id
+                        :end-fill-color colors/white
+                        :render-fn      list-item}])]))

@@ -8,7 +8,6 @@
             [status-im.js-dependencies :as dependencies]
             [status-im.native-module.core :as status]
             [status-im.ui.components.list-selection :as list-selection]
-            [status-im.ui.screens.browser.default-dapps :as default-dapps]
             [status-im.ui.screens.navigation :as navigation]
             [status-im.utils.ethereum.core :as ethereum]
             [status-im.utils.ethereum.ens :as ens]
@@ -59,16 +58,8 @@
   {:db            (update-in db [:browser/browsers] dissoc browser-id)
    :data-store/tx [(browser-store/remove-browser-tx browser-id)]})
 
-(defn check-if-dapp-in-list [{:keys [history history-index name] :as browser}]
-  (let [history-host (http/url-host (try (nth history history-index) (catch js/Error _)))
-        dapp         (first (filter #(= history-host (http/url-host (http/normalize-url (:dapp-url %))))
-                                    (apply concat (mapv :data default-dapps/all))))]
-    (if dapp
-      ;;TODO(yenda): the consequence of this is that if user goes to a different
-      ;;url from a dapp browser, the name of the browser in the home screen will
-      ;;change
-      (assoc browser :dapp? true :name (:name dapp))
-      (assoc browser :dapp? false :name (or name (i18n/label :t/browser))))))
+(defn update-dapp-name [{:keys [name] :as browser}]
+  (assoc browser :dapp? false :name (or name (i18n/label :t/browser))))
 
 (defn check-if-phishing-url [{:keys [history history-index] :as browser}]
   (let [history-host (http/url-host (try (nth history history-index) (catch js/Error _)))]
@@ -122,7 +113,7 @@
   [{:keys [db now]}
    {:keys [browser-id] :as browser}]
   (let [updated-browser (-> (assoc browser :timestamp now)
-                            (check-if-dapp-in-list)
+                            (update-dapp-name)
                             (check-if-phishing-url))]
     {:db            (update-in db
                                [:browser/browsers browser-id]
@@ -254,8 +245,7 @@
   If the browser is reused, the history is flushed"
   [{:keys [db] :as cofx} url]
   (let [normalized-url (http/normalize-and-decode-url url)
-        host (http/url-host normalized-url)
-        browser {:browser-id    (or host (random/id))
+        browser {:browser-id    (random/id)
                  :history-index 0
                  :history       [normalized-url]}]
     (if (utils.universal-links/universal-link? normalized-url)

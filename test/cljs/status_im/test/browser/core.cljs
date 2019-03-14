@@ -35,8 +35,8 @@
                                         {:browser-id "cryptokitties.co"
                                          :history-index 0
                                          :history ["http://cryptokitties.co"]
-                                         :dapp? true
-                                         :name "CryptoKitties"
+                                         :dapp? false
+                                         :name "browser"
                                          :timestamp 1}))
             "some properties of the browser are not correct")
 
@@ -75,8 +75,8 @@
                                             {:browser-id "cryptokitties.co"
                                              :history-index 0
                                              :history ["http://cryptokitties.co"]
-                                             :dapp? true
-                                             :name "CryptoKitties"
+                                             :dapp? false
+                                             :name "browser"
                                              :timestamp 2}))
                 "some properties of the browser are not correct")
             (is (nil? (browser/navigate-to-next-page result-open-existing))
@@ -96,8 +96,8 @@
                                                 {:browser-id "cryptokitties.co"
                                                  :history-index 1
                                                  :history ["http://cryptokitties.co" dapp1-url2]
-                                                 :dapp? true
-                                                 :name "CryptoKitties"
+                                                 :dapp? false
+                                                 :name "browser"
                                                  :timestamp 4}))
                     "some properties of the browser are not correct")
 
@@ -109,8 +109,8 @@
                                                     {:browser-id "cryptokitties.co"
                                                      :history-index 0
                                                      :history ["http://cryptokitties.co" dapp1-url2]
-                                                     :dapp? true
-                                                     :name "CryptoKitties"
+                                                     :dapp? false
+                                                     :name "browser"
                                                      :timestamp 5}))
                         "some properties of the browser are not correct")
 
@@ -122,7 +122,7 @@
                                                       {:browser-id "cryptokitties.co"
                                                        :history-index 1
                                                        :history ["http://cryptokitties.co" dapp1-url2]
-                                                       :dapp? true
-                                                       :name "CryptoKitties"
+                                                       :dapp? false
+                                                       :name "browser"
                                                        :timestamp 6}))
                           "some properties of the browser are not correct"))))))))))))

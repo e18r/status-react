@@ -203,7 +203,6 @@
 (spec/def :stickers/recent (spec/nilable vector?))
 
 (spec/def ::db (spec/keys :opt [:contacts/contacts
-                                :contacts/dapps
                                 :contacts/new-identity
                                 :contacts/new-identity-error
                                 :contacts/identity

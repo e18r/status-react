@@ -980,5 +980,7 @@
     "status-not-sent": "",
     "status-not-sent-without-tap": "",
     "confirm-install": "Confirm Install",
-    "extension-install-alert": "Development mode is required to install an extension. Do you want to enable and continue installing?"
+    "extension-install-alert": "Development mode is required to install an extension. Do you want to enable and continue installing?",
+    "open-dapp-store": "Open the ÐApp Store",
+    "browsed-websites": "Browsed websites will appear here."
 }
