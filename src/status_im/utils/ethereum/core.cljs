@@ -12,7 +12,8 @@
    :testnet {:id 3 :name "Ropsten"}
    :rinkeby {:id 4 :name "Rinkeby"}
    :xdai    {:id 100 :name "xDai"}
-   :poa     {:id 99 :name "POA"}})
+   :poa     {:id 99 :name "POA"}
+   :goerli  {:id 5 :name "Goerli"}})
 
 (defn chain-id->chain-keyword [i]
   (or (some #(when (= i (:id (val %))) (key %)) chains)
