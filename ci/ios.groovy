@@ -21,6 +21,7 @@ def bundle(type) {
   plutil('CFBundleBuildUrl', currentBuild.absoluteUrl)
   /* the dir might not exist */
   sh 'mkdir -p status-e2e'
+  sh 'ln -s $(which node) /usr/local/bin/node'
   /* build the actual app */
   withCredentials([
     string(credentialsId: 'SLACK_URL', variable: 'SLACK_URL'),
